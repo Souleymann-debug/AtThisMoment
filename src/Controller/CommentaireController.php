@@ -35,4 +35,29 @@ class CommentaireController extends AbstractController
 
      }
 
+     //Nouvelle Controleur recuperer au format jason notre commentaires
+
+     /**
+      * @Route("/commentaires", name="lire_commentaire")
+      */
+      public function getAll(): Response {
+          $commentaires = $this->getDoctrine()->getRepository(Commentaire::class)->findAll();
+
+
+          $arrayOfComments = [];
+
+          foreach ($commentaires as $commentaire){
+              
+              $arrayOfComments[] = $commentaire->toArray();
+          }
+          return $this->json($arrayOfComments);
+      }
+
+      /**
+       * @Route("/ajax", name="ajax")
+       */
+       public function ajax(){
+           return $this->render("ajax.html.twig");
+       }
+
 }

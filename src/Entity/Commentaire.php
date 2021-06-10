@@ -55,4 +55,14 @@ class Commentaire
 
         return $this;
     }
+
+    //Transformer l'objet en tableau
+    public function toArray(){
+        return[
+            "id"=>$this->getId(),
+            "contenu"=>$this->getContenu(),
+            "dateComment"=>$this->getDateComment(),
+
+        ];
+    }
 }
