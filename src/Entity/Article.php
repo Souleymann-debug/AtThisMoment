@@ -34,6 +34,11 @@ class Article
     private $image;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $rubrique;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private $valide;
@@ -130,7 +135,25 @@ class Article
     public function setComments($comments): self
     {
         $this->comments = $comments;
+        return $this;
+    }
 
+    /**
+     * Get the value of rubrique
+     */ 
+    public function getRubrique()
+    {
+        return $this->rubrique;
+    }
+
+    /**
+     * Set the value of rubrique
+     *
+     * @return  self
+     */ 
+    public function setRubrique($rubrique)
+    {
+        $this->rubrique = $rubrique;
         return $this;
     }
 }
