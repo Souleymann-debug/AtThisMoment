@@ -1,0 +1,37 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<div class="container">
+    <a href="/commentaires" class="btn btn-primary js-commentaires">Afficher les commentaires</a>
+    <div class="commentaires"></div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    window.addEventListener("load",event=>{
+        document.querySelector("a.js-commentaires").addEventListener("click",getCommentaires);
+    });
+
+    function getCommentaires(event){
+        event.preventDefault(); //pour ne pas deriger vers la page ajax
+        axios.get(this.href).then(response=>{
+        const commentaires = document.querySelector("div.commentaires");
+        if (this.classList.contains("btn-primary")){
+            response.data.forEach(commentaire =>{
+               const item = document.createElement("li"); // créer un li ds HTML
+               item.textContent = commentaire.contenu + ' - ' + moment(commentaire.dateComment.date).format('DD/MM/YYYY');
+               //item.textContent = "eee";
+               //item.date = commentaire.dateComment;
+               commentaires.appendChild(item);
+            });
+        } 
+        })
+    }
+</script>
+
+{% endblock %}

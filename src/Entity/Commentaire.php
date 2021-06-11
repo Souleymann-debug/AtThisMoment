@@ -27,6 +27,11 @@ class Commentaire
      */
     private $dateComment;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="comments")
+     */
+    private $article;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,34 @@ class Commentaire
     public function setDateComment(\DateTimeInterface $dateComment): self
     {
         $this->dateComment = $dateComment;
+
+        return $this;
+    }
+
+    //Transformer l'objet en tableau
+    public function toArray(){
+        return[
+            "id"=>$this->getId(),
+            "contenu"=>$this->getContenu(),
+            "dateComment"=>$this->getDateComment(),
+
+        ];
+    }
+
+    /**
+     * Get the value of article
+     */
+    public function getArticle()
+    {
+        return $this->article;
+    }
+
+    /**
+     * Set the value of article
+     */
+    public function setArticle($article): self
+    {
+        $this->article = $article;
 
         return $this;
     }

@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {% endblock %}
+
+{% block title %} Les commentaires{% endblock %}
   
 {% block body %}
 
@@ -8,11 +9,17 @@
 
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}})}}
 {{ form_row(form.contenu)}}
+{{ form_row(form.dateComment)}}
 
-<button type="submit" class="btn btn-primary" >
-		Envoyer</button>
+
+<button type="submit" class="btn btn-primary" >Envoyer</button>
 	{{form_end(form)}}
 </div>
+
+{% if admin %}
+    <div class="row no-"></div>
+
+
 
 
 {% endblock %}
