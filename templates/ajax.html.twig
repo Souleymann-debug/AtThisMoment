@@ -7,6 +7,9 @@
     <div class="commentaires"></div>
 </div>
 
+    <div class="row">
+
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -27,6 +30,10 @@
                item.textContent = commentaire.contenu + ' - ' + moment(commentaire.dateComment.date).format('DD/MM/YYYY');
                //item.textContent = "eee";
                //item.date = commentaire.dateComment;
+               supprimer = document.createElement("a");
+               supprimer.textContent = "supprimer";
+                supprimer.href = "/sup_commentaire/"+commentaire.id;
+                item.appendChild(supprimer);
                commentaires.appendChild(item);
             });
         } 
