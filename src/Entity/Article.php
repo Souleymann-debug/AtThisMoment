@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,6 +42,15 @@ class Article
      * @ORM\Column(type="date")
      */
     private $datePoste;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Commentaire", mappedBy="article")
+     */
+    private $comments;
+
+    public function __construct() {
+        $this->comments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -102,6 +112,24 @@ class Article
     public function setDatePoste(\DateTimeInterface $datePoste): self
     {
         $this->datePoste = $datePoste;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of comments
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Set the value of comments
+     */
+    public function setComments($comments): self
+    {
+        $this->comments = $comments;
 
         return $this;
     }
