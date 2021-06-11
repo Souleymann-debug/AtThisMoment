@@ -35,6 +35,16 @@ class CommentaireController extends AbstractController
 
      }
 
+     /**
+      * @Route("/commentaire/delete/{id}")
+      */
+      public function delete(Commentaire $commentaire): Response{
+          $em = $this->getDoctrine()()->getManager();
+          $em->remove($commentaire);
+          $em->flush();
+          return $this->redirectToRoute("commentaire");
+      }
+
      //Nouvelle Controleur recuperer au format jason notre commentaires
 
      /**
