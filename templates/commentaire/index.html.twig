@@ -16,16 +16,4 @@
 	{{form_end(form)}}
 </div>
 
-    <div class="row">
-    {# <form method="post" class="col" action="{{ path('sup-commentaire', {'id': commentaire.id}) }}"> #}
-    <form method="post" action="{{ path('sup-commentaire', {'id': commentaire.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-         {# <input type="hidden" name="_method" value="SUP"> #}
-        <input type="hidden" name="_token" value="{{ csrf_token('SUP' ~ commentaire.id) }}">
-        <input type="submit" class="btn btn-danger w-200" value="supprimer">
-    </form>
-    </div>
-
-
-
-
 {% endblock %}
