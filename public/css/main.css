@@ -1,5 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap');
 
-.h1 {
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.ff-play {
     font-family: 'Playfair Display', serif;
+}
+
+.card-title {
+    font-weight: 600;
+}
+
+.fit-cover {
+    object-fit: cover;
 }

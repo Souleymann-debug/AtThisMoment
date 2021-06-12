@@ -24,7 +24,7 @@ class Article
     private $titre;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text", length=65535)
      */
     private $contenu;
 
@@ -32,19 +32,14 @@ class Article
      * @ORM\Column(type="string", length=255)
      */
     private $image;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $rubrique;
-
+    
     /**
      * @ORM\Column(type="boolean")
      */
     private $valide;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     private $datePoste;
 
@@ -52,6 +47,16 @@ class Article
      * @ORM\OneToMany(targetEntity="App\Entity\Commentaire", mappedBy="article")
      */
     private $comments;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Rubrique::class)
+     */
+    private $rubrique;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $a_la_une;
 
     public function __construct() {
         $this->comments = new ArrayCollection();
@@ -138,22 +143,27 @@ class Article
         return $this;
     }
 
-    /**
-     * Get the value of rubrique
-     */ 
-    public function getRubrique()
+    public function getRubrique(): ?Rubrique
     {
         return $this->rubrique;
     }
 
-    /**
-     * Set the value of rubrique
-     *
-     * @return  self
-     */ 
-    public function setRubrique($rubrique)
+    public function setRubrique(?Rubrique $rubrique): self
     {
         $this->rubrique = $rubrique;
+
+        return $this;
+    }
+
+    public function getALaUne(): ?bool
+    {
+        return $this->a_la_une;
+    }
+
+    public function setALaUne(bool $a_la_une): self
+    {
+        $this->a_la_une = $a_la_une;
+
         return $this;
     }
 }

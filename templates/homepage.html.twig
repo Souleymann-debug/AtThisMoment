@@ -2,26 +2,72 @@
 
 {% block body %}
 
-    <div class="container">
-        <div class="row mb-2">
-            <div class="col-md-6">
-            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                <div class="col-auto d-none d-lg-block">
-                    <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+    <section class="bg-light mb-2">
+        <div class="container py-4">
+            <h1 class="ff-play fs-3 mb-3">A la une</h1>
+            <div class="row">
+                <div id="carouselNews" class="carousel slide col-md-8" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        {% for key, article in articleALaUne|slice(0, 8) %}
+                            <button type="button" data-bs-target="#carouselNews" 
+                                {% if loop.index == 1 %}class="active" aria-current="true"{% endif %}
+                                data-bs-slide-to="{{ key }}" aria-label="Slide {{ key }}"></button>
+                        {% endfor %}
+                    </div>
+                    <div class="carousel-inner">
+                        {% for article in articleALaUne|slice(0, 8) %}
+                            <div class="carousel-item{% if loop.index == 1 %} active{% endif %}" data-bs-interval="10000">
+                                <img src="{{ asset('images/' ~ article.image) }}" class="d-block w-100" alt="...">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h2>{{ article.titre }}</h2>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselNews" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselNews" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
-                <div class="col p-4 d-flex flex-column position-static">
-                    <strong class="d-inline-block mb-2 text-primary">World</strong>
-                    <h3 class="mb-0">Featured post</h3>
-                    <div class="mb-1 text-muted">Nov 12</div>
-                    <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="stretched-link">Continue reading</a>
+
+                <div class="col-md-4">
+                    {% for article in articleALaUne|slice(9, 15) %}
+                        <div class="{% if not loop.last %}border-bottom border-1  pb-2{% endif %} {% if not loop.first %}pt-2{% endif %}">
+                            <span class="text-secondary">{{ article.rubrique }}</span>
+                            <h2 class="ff-play fs-6 fw-bold">
+                                <a href="#" class="text-decoration-none link-dark">{{ article.titre }}</a>
+                            </h2>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
-            </div>
-
-
         </div>
-    </div>
+    </section>
 
+    {% for rubrique, articles in articlesList %}
+        <section class="container py-2">
+            <div class="d-flex align-items-center justify-content-between border-bottom border-2 pb-3 mb-3">
+                <h1 class="ff-play fs-3">{{ rubrique }}</h1>
+                <a href="#" class="text-decoration-none link-secondary">Plus d'actualités</a>
+            </div>
+            <div class="row">
+                {% for article in articles %}
+                    <article class="d-flex flex-column col-md-3 my-3 position-relative">
+                        <img src="{{ asset('images/' ~ article.image) }}" class="card-img-top fit-cover w-100" height="200">
+                        <div class="d-flex flex-column card-body px-3 px-md-0">
+                            <span>{{ article.datePoste|date('d/m/Y') }}</span>
+                            <h2 class="ff-play fs-6 card-title">
+                                <a href="#" class="stretched-link text-decoration-none link-dark">{{ article.titre }}</a>
+                            </h2>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+    {% endfor %}
 
 {% endblock %}
