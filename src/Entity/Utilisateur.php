@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,7 +48,14 @@ class Utilisateur
      */
     private $isadmin;
 
-    
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="utilisateur")
+     */
+    private $idutilisateur ;
+
+    public function __construct() {
+        $this->articles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {

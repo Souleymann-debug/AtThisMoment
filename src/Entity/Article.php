@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,6 +47,13 @@ class Article
      * @ORM\Column(type="date")
      */
     private $datePoste;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur",inversedBy="articles")
+     */
+    private $idutilisateur ;
+
 
     public function getId(): ?int
     {
