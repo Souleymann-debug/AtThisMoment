@@ -48,12 +48,14 @@ class Article
      */
     private $datePoste;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur",inversedBy="articles")
+     * @ORM\OneToMany(targetEntity="App\Entity\Commentaire", mappedBy="article")
      */
-    private $idutilisateur ;
+    private $comments;
 
+    public function __construct() {
+        $this->comments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +122,23 @@ class Article
     }
 
     /**
+     * Get the value of comments
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Set the value of comments
+     */
+    public function setComments($comments): self
+    {
+        $this->comments = $comments;
+        return $this;
+    }
+
+    /**
      * Get the value of rubrique
      */ 
     public function getRubrique()
@@ -135,7 +154,6 @@ class Article
     public function setRubrique($rubrique)
     {
         $this->rubrique = $rubrique;
-
         return $this;
     }
 }

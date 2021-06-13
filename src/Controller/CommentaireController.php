@@ -36,10 +36,10 @@ class CommentaireController extends AbstractController
      }
 
      /**
-      * @Route("/commentaire/delete/{id}")
+      * @Route("/sup_commentaire/{id}", name ="sup-commentaire")
       */
       public function delete(Commentaire $commentaire): Response{
-          $em = $this->getDoctrine()()->getManager();
+          $em = $this->getDoctrine()->getManager();
           $em->remove($commentaire);
           $em->flush();
           return $this->redirectToRoute("commentaire");
@@ -56,9 +56,8 @@ class CommentaireController extends AbstractController
 
           $arrayOfComments = [];
 
-          foreach ($commentaires as $commentaire){
-              
-              $arrayOfComments[] = $commentaire->toArray();
+          foreach ($commentaires as $commentaire){  
+            $arrayOfComments[] = $commentaire->toArray();
           }
           return $this->json($arrayOfComments);
       }
