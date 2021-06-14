@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mappinf\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
+ * Vich\Uploadable()
  */
 class Article
 {
@@ -40,13 +43,18 @@ class Article
 
     /**
      * @ORM\Column(type="boolean")
-     */
+     */ 
     private $valide;
 
     /**
      * @ORM\Column(type="date")
      */
     private $datePoste;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="articles")
+     */
+    private $utilisateur;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Commentaire", mappedBy="article")

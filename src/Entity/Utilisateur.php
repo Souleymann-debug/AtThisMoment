@@ -47,11 +47,12 @@ class Utilisateur
      * @ORM\Column(type="boolean")
      */
     private $isadmin;
+    
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="utilisateur")
      */
-    private $idutilisateur ;
+    private $articles ;
 
     public function __construct() {
         $this->articles = new ArrayCollection();

@@ -21,11 +21,33 @@ class ArticleController extends AbstractController{
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            dump($article);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($article);
+            $em->flush();
         }
 
         return $this->render("article/new.html.twig",[
             'form' => $form->createView()
+        ]);
+    }
+    
+    /**
+     * @Route("/", name="article-readAll")
+     */
+    public function readAll(){
+        $rep = $this->getDoctrine()->getRepository(Article::class);
+        $articles = $rep->findAll();
+        return $this->render("article/index.html.twig",[
+            "articles"=>$articles,
+        ]);
+    }
+
+    /**
+     * @Route("/article/{id}", name="article-readOne")
+     */
+    public function readOne(Article $article){
+        return $this->render("article/readOne.html.twig",[
+            "article"=>$article,
         ]);
     }
 }
