@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Form\ArticleType;
+use App\Repository\ArticleRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,8 +15,13 @@ class ArticleController extends AbstractController{
     /**
      * @Route("/article/new", name="article")
      */
-    public function new(Request $request): Response {
-        $article  = new Article() ;
+
+    public function new(ArticleRepository $repo, PaginatorInterface $paginatorInterface , Request $request): Response {
+        $article  =  $paginatorInterface->paginate(
+            $repo->findAllWithPagination(),
+            $request->query->getInt('page', 1), /*page number*/
+            6 /*limit per page*/
+        );
 
         $form = $this->createForm(ArticleType::class, $article);
 

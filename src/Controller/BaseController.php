@@ -2,6 +2,7 @@
 // src/Controller/BaseController.php
 namespace App\Controller;
 
+use Doctrine\ORM\Query;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,4 +23,6 @@ class BaseController extends AbstractController
             'articleByCategory' => $articleByCategory
         ]);
     }
+
+  
 }
