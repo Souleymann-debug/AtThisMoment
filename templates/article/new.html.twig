@@ -9,5 +9,16 @@
         {{form_row(form.valide)}}
         {{form_row(form.datePoste)}}
         <button type='submit' class='btn btn-primary'>Créer</button>
+        
+        
+        <a href="#" class="btn.btn-link js-like">
+        {% if app.user and article.isLikedByUser(app.user) %}
+        <i class="fas fa-thumabs-up"></i>
+        {% else %}
+            <i class="far fa-thumabs-up"></i>
+         {% endif %}
+        <span class="js-likes">{{article.likes | length}}</span>
+        <span class="js-label">J'aime</span>
+        </a>
     {{form_end(form)}}
 {% endblock %}
