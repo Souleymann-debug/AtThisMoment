@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Rubrique;
 use App\Repository\ArticleRepository;
 use App\Repository\RubriqueRepository;
+use App\Service\RubriqueHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,32 +14,64 @@ class BaseController extends AbstractController
 {
     private $rubriqueRepository;
     private $articleRepository;
+    private $rubriqueHelper;
 
     public function __construct(
             RubriqueRepository $rubriqueRepository,
-            ArticleRepository $articleRepository
+            ArticleRepository $articleRepository,
+            RubriqueHelper $rubriqueHelper
         )
     {
         $this->rubriqueRepository = $rubriqueRepository;
         $this->articleRepository = $articleRepository;
+        $this->rubriqueHelper = $rubriqueHelper;
     } 
 
     /**
-    * @Route("/")
+    * @Route("/", name="home")
     */
     public function index(): Response
     {
-        $rubriques = $this->rubriqueRepository->findAll();
-        $articles = [];
-        foreach ($rubriques as $rubrique) {
-            $articles[ $rubrique->getNom() ] = $this->articleRepository->findBy(array('rubrique' => $rubrique, 'a_la_une' => 0));
-        }
+        // article A la une à mettre dans un slider
         $articleALaUne = $this->articleRepository->findBy(array('a_la_une' => 1), array('datePoste' => 'DESC'), 15);
+        // articles des autre rubriques non afficher dans le slider
+        $articles = [];
+        foreach ($this->rubriqueHelper->getRubriques() as $rubrique) {
+            $articles[ $rubrique->getNom() .','.$rubrique->getSlug() ] = $this->articleRepository->findBy(array('rubrique' => $rubrique, 'a_la_une' => 0));
+        }
 
         return $this->render('homepage.html.twig', [
-            'rubriques' => $rubriques,
-            'articlesList' => $articles,
-            'articleALaUne' => $articleALaUne
+            'rubriques' => $this->rubriqueHelper->getRubriques(),
+            'articleALaUne' => $articleALaUne,
+            'articlesList' => $articles
+        ]);
+    }
+
+    /** 
+     * @Route("/rubrique/{slug}", name="rubrique")
+     */
+    public function rubrique(string $slug): Response
+    {
+        $rubrique = $this->rubriqueHelper->getRubriqueBySlug($slug);
+        $articles = $this->articleRepository->findBy(array('rubrique' => $rubrique));
+
+        return $this->render('rubrique.html.twig', [
+            'rubriques' => $this->rubriqueHelper->getRubriques(),
+            'rubrique' => $rubrique->getnom(),
+            'articles' => $articles,
+        ]);
+    }
+
+    /** 
+     * @Route("/article/{id}", name="article_detail")
+     */
+    public function article(int $id): Response
+    {
+        $article = $this->articleRepository->findOneBy(array('id' => $id));
+
+        return $this->render('article/article-detail.html.twig', [
+            'rubriques' => $this->rubriqueHelper->getRubriques(),
+            'article' => $article,
         ]);
     }
 }

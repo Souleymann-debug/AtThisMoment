@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ rubrique }}{% endblock %}
+
+{% block body %}
+
+    <div class="bg-light">
+        <h1 class="container py-5 ff-play fs-2">{{ rubrique }}</h1>
+    </div>
+    <section class="container">
+        <div class="row">
+            {% for article in articles %}
+                <article class="d-flex flex-column col-md-3 my-3 position-relative">
+                    <img src="{{ asset('images/' ~ article.image) }}" class="card-img-top fit-cover w-100" height="200">
+                    <div class="d-flex flex-column card-body px-3 px-md-0">
+                        <span>{{ article.datePoste|date('d/m/Y') }}</span>
+                        <h2 class="ff-play fs-6 card-title">
+                            <a href="{{ path('article_detail', {'id': article.id}) }}" 
+                               class="stretched-link text-decoration-none link-dark">{{ article.titre }}</a>
+                        </h2>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+{% endblock %}

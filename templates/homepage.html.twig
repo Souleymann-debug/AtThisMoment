@@ -19,7 +19,12 @@
                             <div class="carousel-item{% if loop.index == 1 %} active{% endif %}" data-bs-interval="10000">
                                 <img src="{{ asset('images/' ~ article.image) }}" class="d-block w-100" alt="...">
                                 <div class="carousel-caption d-none d-md-block">
-                                    <h2>{{ article.titre }}</h2>
+                                    <h2 class="">
+                                        <a href="{{ path('article_detail', {'id': article.id}) }}" 
+                                           class="text-decoration-none link-light">
+                                            {{ article.titre }}
+                                        </a>
+                                    </h2>
                                 </div>
                             </div>
                         {% endfor %}
@@ -39,7 +44,8 @@
                         <div class="{% if not loop.last %}border-bottom border-1  pb-2{% endif %} {% if not loop.first %}pt-2{% endif %}">
                             <span class="text-secondary">{{ article.rubrique }}</span>
                             <h2 class="ff-play fs-6 fw-bold">
-                                <a href="#" class="text-decoration-none link-dark">{{ article.titre }}</a>
+                                <a href="{{ path('article_detail', {'id': article.id}) }}" 
+                                   class="text-decoration-none link-dark">{{ article.titre }}</a>
                             </h2>
                         </div>
                     {% endfor %}
@@ -51,8 +57,10 @@
     {% for rubrique, articles in articlesList %}
         <section class="container py-2">
             <div class="d-flex align-items-center justify-content-between border-bottom border-2 pb-3 mb-3">
-                <h1 class="ff-play fs-3">{{ rubrique }}</h1>
-                <a href="#" class="text-decoration-none link-secondary">Plus d'actualités</a>
+                {% set rub = rubrique|split(',') %}
+                <h1 class="ff-play fs-3">{{ rub[0] }}</h1>
+                <a href="{{ path('rubrique', {'slug': rub[1]}) }}" 
+                   class="text-decoration-none link-secondary">Plus d'actualités</a>
             </div>
             <div class="row">
                 {% for article in articles %}
@@ -61,7 +69,8 @@
                         <div class="d-flex flex-column card-body px-3 px-md-0">
                             <span>{{ article.datePoste|date('d/m/Y') }}</span>
                             <h2 class="ff-play fs-6 card-title">
-                                <a href="#" class="stretched-link text-decoration-none link-dark">{{ article.titre }}</a>
+                                <a href="{{ path('article_detail', {'id': article.id}) }}" 
+                                   class="stretched-link text-decoration-none link-dark">{{ article.titre }}</a>
                             </h2>
                         </div>
                     </article>

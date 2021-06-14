@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.titre }}{% endblock %}
+
+{% block body %}
+
+    <div class="bg-light row">
+        <div class="col-md-7 mx-auto py-5">
+            <ul class="list-unstyled d-flex justify-content-center">
+                <li class="pe-2"><a href="{{ path('home') }}">Accueil</a></li> / 
+                <li class="px-2"><a href="{{ path('rubrique', {'slug': article.rubrique.slug}) }}">{{ article.rubrique.nom }}</a></li>
+            </ul>
+            <h1 class="ff-play fs-2 mt-4 text-center">{{ article.titre }}</h1>
+        </div>
+    </div>
+    <section class="row">
+        <article class="col-md-7 mx-auto">
+            <img src="{{ asset('images/' ~ article.image) }}" class="card-img-top fit-cover w-100 mt-5 mb-3" height="400">
+            <span class="">Publié le {{ article.datePoste|date('d/m/Y') }}</span>
+            <p class="my-3">{{ article.contenu }}</p>
+        </article>
+    </section>
+
+{% endblock %}
