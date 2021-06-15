@@ -17,24 +17,4 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    // Créer plusieurs utilisateur et pour chaque article un certin nbre de like 
-
-    // $manager->persist($utilisateur);
-
-    // $utilisateur[] = $utilisateur;
-
-    // for ($i = 0; $i<20; $i++){
-    //     $utilisateur = new Utilisateur();
-    //     $utilisateur->setEmail($faker->email)
-    //     ->setPassword($this->encoder->encodePassword($utilisateur, 'password'));
-
-    //     $manager->persist($utilisateur);
-    //         $utilisateur[] = $utilisateur;
-
-
-    // }
-
-    //créer plusieur utilisateurs
-
-  
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Utilisateur;
 use App\Entity\Article;
 use App\Entity\Postlike;
 use App\Form\ArticleType;
@@ -39,15 +40,15 @@ class ArticleController extends AbstractController{
      * 
      * @Route("/article/{id}/like", name="article_like")
      */
-    public function like(Article $article, ObjectManager $manager, PostlikeRepository $postlikeRepository) :
-     Response {
-         $utilisateur= $this->getUtilisateur();
+    // public function like(Article $article, ObjectManager $manager, PostlikeRepository $postlikeRepository) :
+    //  Response {
+    //      $utilisateur= $this->getUtilisateur();
 
-         if(!$utilisateur) return $this->json([
-             'code'=> 403,
-             'message' =>"tu n'es pas autorisé"
-         ], 403);
-         return $this->json(['code'=> 200, 'message' => 'Ca marche bien'],200);
+    //      if(!$utilisateur) return $this->json([
+    //          'code'=> 403,
+    //          'message' =>"tu n'es pas autorisé"
+    //      ], 403);
+    //      return $this->json(['code'=> 200, 'message' => 'Ca marche bien'],200);
 
-    }
+    // }
 }
