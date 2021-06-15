@@ -16,7 +16,9 @@ class ArticleType extends AbstractType
         $builder
             ->add('titre')
             ->add('contenu')
-            ->add('image')
+            ->add('image',FileType::class,[
+                'required'=>false,
+            ])
             ->add('rubrique',ChoiceType::class, array(
                 'label' => 'Rubrique', 
                 'choices' => array (

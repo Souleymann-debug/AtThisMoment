@@ -15,12 +15,16 @@ class ArticleController extends AbstractController{
      */
     public function new(Request $request): Response {
         $article  = new Article() ;
+        
 
         $form = $this->createForm(ArticleType::class, $article);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $file = $article->getImage();
+           // $filename = md5(uniqid()).'.'.$file->guessExtension();
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
