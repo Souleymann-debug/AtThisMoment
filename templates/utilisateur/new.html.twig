@@ -1,6 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+    <div class='container'>
     {{form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
         {{form_row(form.nom)}}
         {{form_row(form.prenom)}}
@@ -10,4 +11,5 @@
         {{form_row(form.isadmin)}}
         <button type='submit' class='btn btn-primary'>Créer</button>
     {{form_end(form)}}
+    </div>
 {% endblock %}

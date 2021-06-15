@@ -5,12 +5,13 @@ namespace App\Entity;
 use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 
 /**
  * @ORM\Entity(repositoryClass=UtilisateurRepository::class)
  */
-class Utilisateur
-{
+class Utilisateur  {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

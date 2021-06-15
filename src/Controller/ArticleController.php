@@ -8,12 +8,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ArticleController extends AbstractController{
     /**
      * @Route("/article/new", name="article")
      */
-    public function new(Request $request): Response {
+    public function new(Request $request,SluggerInterface $slugger): Response {
         $article  = new Article() ;
         
 
@@ -22,8 +24,24 @@ class ArticleController extends AbstractController{
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $article->getImage();
-           // $filename = md5(uniqid()).'.'.$file->guessExtension();
+            $file = $form->get("image")->getData();
+            
+            if ($file) {
+                $originalFileName = pathinfo($file->getClientOriginalName(),PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFileName);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+
+                try {
+                    $file->move(
+                        $this->getParameter('brochures_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                $article->setImage($newFilename);
+            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
@@ -53,5 +71,31 @@ class ArticleController extends AbstractController{
         return $this->render("article/readOne.html.twig",[
             "article"=>$article,
         ]);
+    }
+
+    /**
+     * @Route("/article/update/{id}", name="article-update")
+     */
+    public function update(Request $req, Article $article){
+        $form = $this->createForm(ArticleType::class);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+        }
+        return $this->render("article/update.html.twig",[
+            "form" => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/article/delete/{id}", name="article-delete")
+     */
+    public function delete(Article $article){
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($article);
+        $em->flush();
+        return $this->redirectToRoute("article-readAll");
     }
 }

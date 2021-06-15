@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\utilisateur;
-use App\Form\utilisateurType;
+use App\Entity\Utilisateur;
+use App\Form\UtilisateurType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
