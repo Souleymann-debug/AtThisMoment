@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="bg-light">
+        <div class="container">
+            <div class="row">
+                <form method="get" action="{{ path('search') }}" role="search" class="col-md-8 mx-auto py-4">
+                    <h1 class="my-0 ff-play fs-2">Résultat de recherche</h1>
+                    <div class="input-group mt-3">
+                        <input type="text" class="form-control" placeholder="Recherche" name ="query" value="{{ query }}" required>
+                        <button type="submit" class="link-secondary border-0 bg-transparent">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24"><title>Search</title><circle cx="10.5" cy="10.5" r="7.5"></circle><path d="M21 21l-5.2-5.2"></path></svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <section class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                {% if articles|length > 0  %}
+                    {% for article in articles %}
+                        <article class="py-4 position-relative border-bottom">
+                            <span>{{ article.rubrique ~' | '~ article.datePoste|date('d/m/Y') }}</span>
+                            <h2 class=" mt-2 ff-play fs-5">
+                                <a href="{{ path('article_detail', {'id': article.id}) }}" 
+                                    class="stretched-link text-decoration-none link-dark">{{ article.titre }}</a>
+                            </h2>
+                        </article>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-secondary fs-4 my-5">Pas de resultats trouvé..</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

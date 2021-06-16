@@ -7,6 +7,7 @@ use App\Repository\ArticleRepository;
 use App\Repository\RubriqueRepository;
 use App\Service\RubriqueHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -74,4 +75,18 @@ class BaseController extends AbstractController
             'article' => $article,
         ]);
     }
+
+    /** 
+     * @Route("/search", name="search")
+     */
+    public function searchAction(Request $request){
+        $query = $request->query->get('query');
+        $articles = $this->articleRepository->findContentLike($query);
+
+        return $this->render('search.html.twig', [
+            'rubriques' => $this->rubriqueHelper->getRubriques(),
+            'query' => $query,
+            'articles' => $articles
+        ]);
+     }
 }
