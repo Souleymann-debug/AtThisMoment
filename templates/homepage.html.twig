@@ -67,7 +67,7 @@
                 {% set rub = rubrique|split(',') %}
                 <h1 class="ff-play fs-3">{{ rub[0] }}</h1>
                 <a href="{{ path('rubrique', {'slug': rub[1]}) }}" 
-                   class="text-decoration-none link-secondary">Plus d'actualités</a>
+                   class="text-decoration-none link-warning">Plus d'actualités</a>
             </div>
             <div class="row">
                 {% for article in articles %}

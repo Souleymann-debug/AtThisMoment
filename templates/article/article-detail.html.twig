@@ -7,8 +7,15 @@
     <div class="bg-light row">
         <div class="col-md-7 mx-auto py-5">
             <ul class="list-unstyled d-flex justify-content-center">
-                <li class="pe-2"><a href="{{ path('home') }}">Accueil</a></li> / 
-                <li class="px-2"><a href="{{ path('rubrique', {'slug': article.rubrique.slug}) }}">{{ article.rubrique.nom }}</a></li>
+                <li class="pe-2">
+                    <a href="{{ path('home') }}" class="link-warning">Accueil</a>
+                </li> / 
+                <li class="px-2">   
+                    <a href="{{ path('rubrique', {'slug': article.rubrique.slug}) }}"
+                       class="link-warning">
+                        {{ article.rubrique.nom }}
+                    </a>
+                </li>
             </ul>
             <h1 class="ff-play fs-2 mt-4 text-center">{{ article.titre }}</h1>
         </div>

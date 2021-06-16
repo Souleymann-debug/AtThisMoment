@@ -1,7 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Open+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap');
 
 * {
     font-family: 'Open Sans', sans-serif;
+}
+
+.ff-logo {
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: 48px;
 }
 
 .ff-play {
