@@ -1,4 +1,7 @@
 {% extends 'base.html.twig' %}
+{% block extrastylesheets %}
+    <link href="{{ asset('css/weather.css') }}" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
 
@@ -8,18 +11,18 @@
             <div class="row">
                 <div id="carouselNews" class="carousel slide col-md-8" data-bs-ride="carousel">
                     <div class="carousel-indicators">
-                        {% for key, article in articleALaUne|slice(0, 8) %}
+                        {% for key, article in articleALaUne|slice(0, 6) %}
                             <button type="button" data-bs-target="#carouselNews" 
                                 {% if loop.index == 1 %}class="active" aria-current="true"{% endif %}
                                 data-bs-slide-to="{{ key }}" aria-label="Slide {{ key }}"></button>
                         {% endfor %}
                     </div>
-                    <div class="carousel-inner">
-                        {% for article in articleALaUne|slice(0, 8) %}
-                            <div class="carousel-item{% if loop.index == 1 %} active{% endif %}" data-bs-interval="10000">
-                                <img src="{{ asset('images/' ~ article.image) }}" class="d-block w-100" alt="...">
+                    <div class="carousel-inner h-100">
+                        {% for article in articleALaUne|slice(0, 6) %}
+                            <div class="h-100 carousel-item{% if loop.index == 1 %} active{% endif %}" data-bs-interval="10000">
+                                <img src="{{ asset('images/' ~ article.image) }}" class="d-block w-100 h-100 fit-cover">
                                 <div class="carousel-caption d-none d-md-block">
-                                    <h2 class="">
+                                    <h2 class="text-shadow-sm fs-4">
                                         <a href="{{ path('article_detail', {'id': article.id}) }}" 
                                            class="text-decoration-none link-light">
                                             {{ article.titre }}
@@ -40,7 +43,11 @@
                 </div>
 
                 <div class="col-md-4">
-                    {% for article in articleALaUne|slice(9, 15) %}
+                    <div id="weather-widget" class="position-relative text-white px-3 py-2 mb-3 text-uppercase">
+                        <h3 id="temp-main" class="fw-bold"></h1>
+                        <h4 id="condition" class="">méteo...</h2>
+                    </div>
+                    {% for article in articleALaUne|slice(7, 8) %}
                         <div class="{% if not loop.last %}border-bottom border-1  pb-2{% endif %} {% if not loop.first %}pt-2{% endif %}">
                             <span class="text-secondary">{{ article.rubrique }}</span>
                             <h2 class="ff-play fs-6 fw-bold">
@@ -79,4 +86,9 @@
         </section>
     {% endfor %}
 
+{% endblock %}
+
+{% block extrajavascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{{ asset('js/weather.js') }}"></script>
 {% endblock %}

@@ -11,6 +11,8 @@
             <link rel="preconnect" href="https://fonts.gstatic.com">
             <link href="{{ asset('css/main.css') }}" rel="stylesheet">
         {% endblock %}
+        {% block extrastylesheets %}
+        {% endblock %}
     </head>
     <body>
         {% block header %}
@@ -21,7 +23,7 @@
                             <a class="link-secondary" href="#">S'enregistrer</a>
                         </div>
                         <div class="col-4 text-center">
-                            <a class="fs-3 ff-play blog-header-logo text-dark text-decoration-none" 
+                            <a class="fs-3 ff-play blog-header-logo text-dark text-decoration-none text-uppercase" 
                                href="{{ path('home') }}">
                                 At this moment
                             </a>
@@ -51,6 +53,8 @@
         {% block javascripts %}
             {#{{ encore_entry_script_tags('app') }}#}
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+        {% endblock %}
+        {% block extrajavascripts %}
         {% endblock %}
     </body>
 </html>

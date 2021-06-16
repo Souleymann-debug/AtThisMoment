@@ -33,7 +33,7 @@ class BaseController extends AbstractController
     public function index(): Response
     {
         // article A la une à mettre dans un slider
-        $articleALaUne = $this->articleRepository->findBy(array('a_la_une' => 1), array('datePoste' => 'DESC'), 15);
+        $articleALaUne = $this->articleRepository->findBy(array('a_la_une' => 1), array('datePoste' => 'DESC'), 12);
         // articles des autre rubriques non afficher dans le slider
         $articles = [];
         foreach ($this->rubriqueHelper->getRubriques() as $rubrique) {

@@ -15,3 +15,7 @@
 .fit-cover {
     object-fit: cover;
 }
+
+.text-shadow-sm {
+    text-shadow: 1px 1px black;
+}
