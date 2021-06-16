@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification d'un article{% endblock %}
+
+{% block body %}
+<div class='container' style='width: 50%'>
+    <h1>Modification d'un article</h1>
+    <br>
+    {{ form_start(form, {'attr':{'novalidate':'novalidate'}}) }}
+        {{ form_row(form.titre) }}
+        {{ form_row(form.contenu) }}
+        {{ form_row(form.image) }}
+        {{ form_row(form.rubrique) }}
+        {{ form_row(form.valide) }}
+        <button type='submit' class='btn btn-primary'>Modifier </button>
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}

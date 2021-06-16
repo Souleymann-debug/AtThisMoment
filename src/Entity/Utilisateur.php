@@ -6,12 +6,13 @@ use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 
 /**
  * @ORM\Entity(repositoryClass=UtilisateurRepository::class)
  */
-class Utilisateur
-{
+class Utilisateur  {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -48,14 +49,20 @@ class Utilisateur
      * @ORM\Column(type="boolean")
      */
     private $isadmin;
+    
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="utilisateur")
+     */
+    private $articles ;
 
     /**
      * @ORM\OneToMany(targetEntity=Postlike::class, mappedBy="utilisateur")
      */
     private $likes;
 
-    public function __construct()
-    {
+    public function __construct() {
+        $this->articles = new ArrayCollection();
         $this->likes = new ArrayCollection();
     }
 

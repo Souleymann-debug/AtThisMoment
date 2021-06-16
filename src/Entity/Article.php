@@ -41,13 +41,18 @@ class Article
 
     /**
      * @ORM\Column(type="boolean")
-     */
+     */ 
     private $valide;
 
     /**
      * @ORM\Column(type="date")
      */
     private $datePoste;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="articles")
+     */
+    private $utilisateur;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Commentaire", mappedBy="article")

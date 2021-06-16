@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <br><br><br>
+    <div class="container">
+        <h2> {{article.titre}} </h2>
+        <br>
+        <p> {{article.contenu}} </p>
+        <br>
+        <p> Posté le : {{article.datePoste|date('d/m/Y')}} </p>
+    </div> 
+{% endblock %}

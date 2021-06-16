@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}    
+    <div class="container">
+        <a href="article/new" class="btn btn-primary mb-3">Ajouter un article</a>
+        <br>
+        <br>
+        <div class="row ">
+        {% for article in articles %}
+            <div class="card" style="width: 20rem;margin-left: 10px">
+                {% if article.image %}
+                    <img class="card-img-top" src="images/article/{{ article.image }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{article.titre}}</h5>
+                    <p class="card-text">{{article.contenu}}</p>
+                    <footer class="blockquote-footer">Ecrit par <cite title="Source Title">Source Title</cite>, le {{article.datePoste|date('d/m/Y')}}</footer>
+                    <a href="/article/ {{article.id}} " class="btn btn-primary btn-sm">Voir la suite</a>
+                    <a href="/article/update/ {{article.id}} " class="btn btn-info btn-sm">Modifier</a>
+                    <a href="/article/delete/ {{article.id}} " class="btn btn-danger btn-sm">Supprimer</a>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
