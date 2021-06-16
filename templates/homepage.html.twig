@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <div id="weather-widget" class="position-relative text-white px-3 py-2 mb-3 text-uppercase">
+                    <div id="weather-widget" class="position-relative text-white px-3 py-2 mb-3 mt-3 mt-md-0 text-uppercase">
                         <h3 id="temp-main" class="fw-bold"></h1>
                         <h4 id="condition" class="">méteo...</h2>
                     </div>
@@ -62,28 +62,30 @@
     </section>
 
     {% for rubrique, articles in articlesList %}
-        <section class="container py-2">
-            <div class="d-flex align-items-center justify-content-between border-bottom border-2 pb-3 mb-3">
-                {% set rub = rubrique|split(',') %}
-                <h1 class="ff-play fs-3">{{ rub[0] }}</h1>
-                <a href="{{ path('rubrique', {'slug': rub[1]}) }}" 
-                   class="text-decoration-none link-warning">Plus d'actualités</a>
-            </div>
-            <div class="row">
-                {% for article in articles %}
-                    <article class="d-flex flex-column col-md-3 my-3 position-relative">
-                        <img src="{{ asset('images/' ~ article.image) }}" class="card-img-top fit-cover w-100" height="200">
-                        <div class="d-flex flex-column card-body px-3 px-md-0">
-                            <span>{{ article.datePoste|date('d/m/Y') }}</span>
-                            <h2 class="ff-play fs-6 card-title">
-                                <a href="{{ path('article_detail', {'id': article.id}) }}" 
-                                   class="stretched-link text-decoration-none link-dark">{{ article.titre }}</a>
-                            </h2>
-                        </div>
-                    </article>
-                {% endfor %}
-            </div>
-        </section>
+        {% if articles|length > 0  %}
+            <section class="container py-2">
+                <div class="d-flex align-items-center justify-content-between border-bottom border-2 pb-3 mb-3">
+                    {% set rub = rubrique|split(',') %}
+                    <h1 class="ff-play fs-3">{{ rub[0] }}</h1>
+                    <a href="{{ path('rubrique', {'slug': rub[1]}) }}" 
+                    class="text-decoration-none link-warning">Plus d'actualités</a>
+                </div>
+                <div class="row">
+                    {% for article in articles %}
+                        <article class="d-flex flex-column col-md-3 my-3 position-relative">
+                            <img src="{{ asset('images/' ~ article.image) }}" class="card-img-top fit-cover w-100" height="200">
+                            <div class="d-flex flex-column card-body px-3 px-md-0">
+                                <span>{{ article.datePoste|date('d/m/Y') }}</span>
+                                <h2 class="ff-play fs-6 card-title">
+                                    <a href="{{ path('article_detail', {'id': article.id}) }}" 
+                                    class="stretched-link text-decoration-none link-dark">{{ article.titre }}</a>
+                                </h2>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
     {% endfor %}
 
 {% endblock %}
