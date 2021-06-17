@@ -65,17 +65,46 @@ class ArticleController extends AbstractController{
      * 
      * @Route("/article/{id}/like", name="article_like")
      */
-    // public function like(Article $article, ObjectManager $manager, PostlikeRepository $postlikeRepository) :
-    //  Response {
-    //      $utilisateur= $this->getUtilisateur();
+    public function like(Article $article, PostlikeRepository $postlikeRepository) : Response {
 
-    //      if(!$utilisateur) return $this->json([
-    //          'code'=> 403,
-    //          'message' =>"tu n'es pas autorisé"
-    //      ], 403);
-    //      return $this->json(['code'=> 200, 'message' => 'Ca marche bien'],200);
+        $manager = $this->getDoctrine()->getManager();
+        $utilisateur = $this->getUser();
 
-    // }
+        if(!$utilisateur) return $this->json([
+            'code'=> 403,
+            'message' =>"unauthorized"
+        ], 403);
+        if ($article->isLikedByUser($utilisateur)){
+            $like = $postlikeRepository->findOneBy([
+                'post' => $article,
+                'utilisateur' => $utilisateur,
+            ]);
+            $manager->remove($like);
+            $manager->flush();
+
+             return $this->json([
+                 'code'=> 200,
+                 'message'=> 'like bien supprime',
+                 'likes'=> $postlikeRepository->count(['article'=> $article])
+                 ],200);
+
+                 // créer un nv like
+
+                 $like = new Postlike();
+                 $like->setArticle($article)
+                    ->setUtilisateur($utilisateur);
+
+                $manager->persist($like);
+                $manager->flush();
+
+         }
+         return $this->json([
+          'code'=> 200,
+          'message' => 'Ca marche bien',
+           'likes' => $postlikeRepository->count(['article' => $article])
+        ],200);
+
+    }
     
     /**
      * @Route("/", name="article-readAll")

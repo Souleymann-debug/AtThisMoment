@@ -16,6 +16,7 @@ class CommentaireController extends AbstractController
      */
      public function new(Request $request): Response {
          $commentaire = new Commentaire();
+         $commentaire->setDateComment(new \DateTime('now'));
 
          $form = $this->createForm(CommentaireType::class,$commentaire);
          $form->handleRequest($request);
@@ -51,7 +52,8 @@ class CommentaireController extends AbstractController
       * @Route("/commentaires", name="lire_commentaire")
       */
       public function getAll(): Response {
-          $commentaires = $this->getDoctrine()->getRepository(Commentaire::class)->findAll();
+            $commentaires = $this->getDoctrine()->getRepository(Commentaire::class)->findAll();
+            
 
 
           $arrayOfComments = [];
