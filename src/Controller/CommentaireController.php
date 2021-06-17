@@ -16,6 +16,7 @@ class CommentaireController extends AbstractController
      */
      public function new(Request $request): Response {
          $commentaire = new Commentaire();
+         $commentaire->setDateComment(new \DateTime('now'));
 
          $form = $this->createForm(CommentaireType::class,$commentaire);
          $form->handleRequest($request);
@@ -27,10 +28,9 @@ class CommentaireController extends AbstractController
         }
 
 
-         return $this->render("commentaire/index.html.twig",[
+        return $this->render("article/index.html.twig",[
             'form' => $form->createView(),"commentaire" => $commentaire
-
-         ]);
+        ]);
 
 
      }

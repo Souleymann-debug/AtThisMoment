@@ -59,7 +59,6 @@ class ArticleType extends AbstractType
                 )
             ))
             ->add('valide')
-            ->add('datePoste')
         ;
     }
 

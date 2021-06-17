@@ -4,10 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Utilisateur;
 use App\Entity\Article;
+use App\Entity\Commentaire;
 use App\Entity\Postlike;
 use App\Form\ArticleType;
+use App\Form\CommentaireType;
 use App\Repository\PostlikeRepository;
+use DateTime;
 use Doctrine\Persistence\ObjectManager;
+use PhpParser\Comment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +25,7 @@ class ArticleController extends AbstractController{
      */
     public function new(Request $request,SluggerInterface $slugger): Response {
         $article  = new Article() ;
+        $article->setDatePoste(new DateTime('now'));
 
         $form = $this->createForm(ArticleType::class, $article);
 
@@ -49,6 +54,7 @@ class ArticleController extends AbstractController{
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
+            return $this->redirectToRoute("article-readAll");
         }
 
         return $this->render("article/new.html.twig",[
@@ -90,9 +96,28 @@ class ArticleController extends AbstractController{
     /**
      * @Route("/article/{id}", name="article-readOne")
      */
-    public function readOne(Article $article){
+    public function readOne(Article $article, Request $request){
+        $repository = $this->getDoctrine()->getRepository(Commentaire::class);
+        $comments = $repository->findBy(["article" => $article]);
+        $comment  = new Commentaire() ;
+        
+
+        $form = $this->createForm(CommentaireType::class, $comment);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $comment->setDateComment(new \DateTime('now'));
+            $comment->setArticle($article);
+            $em->persist($comment);
+            $em->flush();
+            return $this->redirectToRoute('article-readOne',['id'=>$article->getId()]);
+        }
         return $this->render("article/readOne.html.twig",[
             "article"=>$article,
+            "comments" => $comments,
+            "form" => $form->createView()
         ]);
     }
 
@@ -100,11 +125,12 @@ class ArticleController extends AbstractController{
      * @Route("/article/update/{id}", name="article-update")
      */
     public function update(Request $req, Article $article){
-        $form = $this->createForm(ArticleType::class);
+        $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($req);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute("article-readAll");
         }
         return $this->render("article/update.html.twig",[
             "form" => $form->createView(),

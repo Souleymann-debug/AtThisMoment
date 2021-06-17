@@ -2,8 +2,12 @@
 
 {% block body %}    
     <div class="container">
-        <a href="article/new" class="btn btn-primary mb-3">Ajouter un article</a>
-        <br>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}   
+            {% if app.user.isadmin == 1 %}
+                <a href="article/new" class="btn btn-primary mb-3">Ajouter un article</a>
+                <br>
+            {% endif %}
+        {% endif %}
         <br>
         <div class="row ">
         {% for article in articles %}
@@ -14,10 +18,17 @@
                 <div class="card-body">
                     <h5 class="card-title">{{article.titre}}</h5>
                     <p class="card-text">{{article.contenu}}</p>
-                    <footer class="blockquote-footer">Ecrit par <cite title="Source Title">Source Title</cite>, le {{article.datePoste|date('d/m/Y')}}</footer>
+                    <footer class="blockquote-footer">Posté le {{article.datePoste|date('d/m/Y')}}</footer>
                     <a href="/article/ {{article.id}} " class="btn btn-primary btn-sm">Voir la suite</a>
-                    <a href="/article/update/ {{article.id}} " class="btn btn-info btn-sm">Modifier</a>
-                    <a href="/article/delete/ {{article.id}} " class="btn btn-danger btn-sm">Supprimer</a>
+                    
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    
+                    {% if app.user.isadmin == 1 %}
+                        <a href="/article/update/ {{article.id}} " class="btn btn-info btn-sm">Modifier</a>
+                        <a href="/article/delete/ {{article.id}} " class="btn btn-danger btn-sm">Supprimer</a>
+                    {% endif %}
+                    {% endif %}
+                    
                 </div>
             </div>
         {% endfor %}

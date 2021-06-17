@@ -5,11 +5,36 @@
     <div class="container">
         <h2> {{article.titre}} </h2>
         <br>
+        {% if article.image %}
+            <img class="card-img-top" src="images\article\{{ article.image }}">
+            <br>
+        {% endif %}
         <p> {{article.contenu}} </p>
         <br>
         <p> Posté le : {{article.datePoste|date('d/m/Y')}} </p>
+        <br>    
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Liste des commentaires</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comment in comments %}
+                    <tr>
+                        <td>{{comment.contenu}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-         <a href="#" class="btn btn-link js-like">
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}})}}
+			{{ form_row(form.contenu)}}
+			<button type="submit" class="btn btn-primary" >Envoyer</button>
+		{{form_end(form)}}
+
+        <a href="#" class="btn btn-link js-like">
             {% if app.user %}
                 {% set isLiked = false %}
                 {% for like in article.likes %}

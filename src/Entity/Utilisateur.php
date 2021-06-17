@@ -118,11 +118,11 @@ class Utilisateur implements UserInterface, \Serializable{
     }
 
     public function getPassword(): ?string{
-        return $this->motdepasse;
+        return $this->password;
     }
 
-    public function setPassword(string $motdepasse): self{
-        $this->password = $this->passwordHacher->hashPassword($this,$motdepasse) ;
+    public function setPassword(string $password): self{
+        $this->password = $this->passwordHacher->hashPassword($this,$password) ;
 
         return $this;
     }
@@ -159,7 +159,7 @@ class Utilisateur implements UserInterface, \Serializable{
             $this->prenom,
             $this->date_naiss,
             $this->email,
-            $this->motdepasse,
+            $this->password,
             $this->isadmin,
         ]);
     }
@@ -171,11 +171,11 @@ class Utilisateur implements UserInterface, \Serializable{
             $this->prenom,
             $this->date_naiss,
             $this->email,
-            $this->motdepasse,
+            $this->password,
             $this->isadmin,
         ) = unserialize($serialized,["allowed_classes"=>false]);
     }
-    
+
     /**
      * @return Collection|Postlike[]
      */

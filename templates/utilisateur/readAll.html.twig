@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+    <h2>Liste des utilisateurs :</h2>
+    <br>
+    <center>
+    <table style='width: 100%'>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Supprimer</th>
+                <th>Modifier</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in utilisateurs %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.nom }}</td>
+                    <td>{{ user.prenom }}</td>
+                    <td>{{ user.email }}</td>
+                    <th> <a class="btn btn-sm btn-danger" href="/utilisateur/delete/{{user.id}}"> Supprimer</a></th>
+                    <th><a class="btn btn-sm btn-info" href="/utilisateur/update/{{user.id}}"> Modifier</a></th>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </center>
+    </div>
+
+{% endblock %}
