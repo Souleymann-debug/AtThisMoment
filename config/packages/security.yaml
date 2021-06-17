@@ -2,8 +2,6 @@ security:
     encoders:
         App\Entity\Utilisateur:
             algorithm : auto
-        App\Entity\User:
-            algorithm: auto
 
 
     # https://symfony.com/doc/current/security/experimental_authenticators.html
@@ -13,7 +11,7 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\User
+                class: App\Entity\Utilisateur
                 property: email
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
@@ -23,6 +21,11 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            logout:
+                path: /logout
+                target: /
+            form_login : 
+                check_path: /login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

@@ -17,7 +17,6 @@ class ArticleController extends AbstractController{
      */
     public function new(Request $request,SluggerInterface $slugger): Response {
         $article  = new Article() ;
-        
 
         $form = $this->createForm(ArticleType::class, $article);
 
