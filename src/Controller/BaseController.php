@@ -2,8 +2,11 @@
 // src/Controller/BaseController.php
 namespace App\Controller;
 
+use App\Entity\Commentaire;
 use App\Entity\Rubrique;
+use App\Form\CommentaireType;
 use App\Repository\ArticleRepository;
+use App\Repository\CommentaireRepository;
 use App\Repository\RubriqueRepository;
 use App\Service\RubriqueHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,16 +19,19 @@ class BaseController extends AbstractController
     private $rubriqueRepository;
     private $articleRepository;
     private $rubriqueHelper;
+    private $commentRepository;
 
     public function __construct(
             RubriqueRepository $rubriqueRepository,
             ArticleRepository $articleRepository,
-            RubriqueHelper $rubriqueHelper
+            RubriqueHelper $rubriqueHelper,
+            CommentaireRepository $commentRepository
         )
     {
         $this->rubriqueRepository = $rubriqueRepository;
         $this->articleRepository = $articleRepository;
         $this->rubriqueHelper = $rubriqueHelper;
+        $this->commentRepository = $commentRepository;
     } 
 
     /**
@@ -64,15 +70,33 @@ class BaseController extends AbstractController
     }
 
     /** 
-     * @Route("/article/{id}", name="article_detail")
+     * @Route("/{rubrique}/article/{id}", name="article_detail")
      */
-    public function article(int $id): Response
+    public function article(int $id, Request $request): Response
     {
         $article = $this->articleRepository->findOneBy(array('id' => $id));
+        $comments = $this->commentRepository->findBy(["article" => $article]);
+
+        $comment  = new Commentaire() ;
+        $form = $this->createForm(CommentaireType::class, $comment);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $comment->setDateComment(new \DateTime('now'));
+            $comment->setArticle($article);
+            $em->persist($comment);
+            $em->flush();
+            return $this->redirectToRoute('article_detail',[
+                'rubrique' => $article->getRubrique()->getSlug(), 'id' => $article->getId()
+            ]);
+        }
 
         return $this->render('article/article-detail.html.twig', [
             'rubriques' => $this->rubriqueHelper->getRubriques(),
             'article' => $article,
+            "comments" => $comments,
+            "form" => $form->createView()
         ]);
     }
 

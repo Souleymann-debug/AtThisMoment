@@ -11,17 +11,34 @@
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
             <link rel="preconnect" href="https://fonts.gstatic.com">
             <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+            <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
         {% endblock %}
         {% block extrastylesheets %}
         {% endblock %}
     </head>
     <body>
         {% block header %}
-            <section class="">
-                <header class="">
+            <section>
+                <header>
                     <div class="bg-dark">
-                        <div class="container d-flex justify-content-between align-items-center">
-                            <a class="link-light" href="#"><small>Se connecter</small></a>
+                        <div class="container pe-0 d-flex justify-content-between align-items-center">
+                            <div class="dropdown ps-2">
+                                <a class="link-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Mon profil</a>
+                                <ul class="dropdown-menu">
+                                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                        <li><a class="dropdown-item" href="{{ path('new_article') }}"><small>Créer un article</small></a></li>
+                                        <li><a class="dropdown-item" href="{{ path('utilisateur-welcome') }}"><small>Voir mon compte</small></a></li>
+                                        <li><a class="dropdown-item" href="{{ path('app_logout') }}"><small>Se déconnecter</small></a></li>
+                                        {% if app.user.isadmin == 1 %}
+                                            <li><a class="dropdown-item" href="{{ path('utilisateur-readAll') }}"><small>Voir tout les utilisateurs</small></a></li>
+                                        {% endif %}
+                                    {% else %}
+                                        <li><a class="dropdown-item" href="{{ path('utilisateur-new') }}"><small>S'inscrire</small></a></li>
+                                        <li><a class="dropdown-item" href="{{ path('utilisateur-login') }}"><small>Se connecter</small></a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
                             <form method="get" action="{{ path('search') }}" role="search" class="py-1">
                                 <div class="input-group">
                                     <input type="text" class="border-0 text-light bg-dark" placeholder="Recherche" name ="query" required>
@@ -41,11 +58,15 @@
                 </header>
 
                 <div class="nav-scroller py-1 bg-warning">
-                    <nav class="nav d-flex justify-content-between container">
-                        {% for rubrique in rubriques %}
-                            <a class="p-2 ff-play link-dark text-decoration-none" href="{{ path('rubrique', {'slug': rubrique.slug}) }}">{{ rubrique.nom }}</a>
-                        {% endfor %}
-                    </nav>
+                    <div class="container">
+                        <nav class="nav d-flex justify-content-between">
+                            {% if rubriques is defined %}
+                                {% for rubrique in rubriques %}
+                                    <a class="p-2 ff-play link-dark text-decoration-none" href="{{ path('rubrique', {'slug': rubrique.slug}) }}">{{ rubrique.nom }}</a>
+                                {% endfor %}
+                            {% endif %}
+                        </nav>
+                    </div>
                 </div>
             </section>
         {% endblock %}
@@ -63,6 +84,9 @@
         {% block javascripts %}
             {#{{ encore_entry_script_tags('app') }}#}
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
         {% endblock %}
         {% block extrajavascripts %}
         {% endblock %}

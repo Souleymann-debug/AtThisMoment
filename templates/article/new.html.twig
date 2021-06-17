@@ -1,13 +1,18 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    {{form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-        {{form_row(form.titre)}}
-        {{form_row(form.contenu)}}
-        {{form_row(form.image)}}
-        {{form_row(form.rubrique)}}
-        {{form_row(form.valide)}}
-        {{form_row(form.datePoste)}}
-        <button type='submit' class='btn btn-primary'>Créer</button>
-    {{form_end(form)}}
+    <section class="container">
+        <div class="col-md-6 mx-auto my-5">
+            <h1 class="ff-play fs-3 mb-3">Nouveau article</h1>
+            {{form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{form_row(form.titre, { 'attr': {'class': 'mb-3'} })}}
+            {{form_row(form.contenu, { 'attr': {'class': 'mb-3'} })}}
+            {{form_row(form.image, { 'attr': {'class': 'mb-3'} })}}
+            {{form_row(form.rubrique, { 'attr': {'class': 'mb-3'} })}}
+            {{form_row(form.a_la_une, { 'attr': {'class': 'mb-3'} })}}
+            {{form_row(form.valide, { 'attr': {'class': 'mb-3'} })}}
+            <button type='submit' class='btn btn-warning mt-2'>Créer</button>
+            {{form_end(form)}}
+        </div>
+    </section>
 {% endblock %}

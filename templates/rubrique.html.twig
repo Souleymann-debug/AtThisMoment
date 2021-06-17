@@ -9,18 +9,22 @@
     </div>
     <section class="container">
         <div class="row">
-            {% for article in articles %}
-                <article class="d-flex flex-column col-md-3 my-3 position-relative">
-                    <img src="{{ asset('images/' ~ article.image) }}" class="card-img-top fit-cover w-100" height="200">
-                    <div class="d-flex flex-column card-body px-3 px-md-0">
-                        <span>{{ article.datePoste|date('d/m/Y') }}</span>
-                        <h2 class="ff-play fs-6 card-title">
-                            <a href="{{ path('article_detail', {'id': article.id}) }}" 
-                               class="stretched-link text-decoration-none link-dark">{{ article.titre }}</a>
-                        </h2>
-                    </div>
-                </article>
-            {% endfor %}
+            {% if articles|length > 0 %}
+                {% for article in articles %}
+                    <article class="d-flex flex-column col-md-3 my-3 position-relative">
+                        <img src="{{ asset('images/article/' ~ article.image) }}" class="card-img-top fit-cover w-100" height="200">
+                        <div class="d-flex flex-column card-body px-3 px-md-0">
+                            <span>{{ article.datePoste|date('d/m/Y') }}</span>
+                            <h2 class="ff-play fs-6 card-title">
+                                <a href="{{ path('article_detail', {'rubrique': article.rubrique.slug,'id': article.id}) }}" 
+                                class="stretched-link text-decoration-none link-dark">{{ article.titre }}</a>
+                            </h2>
+                        </div>
+                    </article>
+                {% endfor %}
+            {% else %}
+                <p class="text-secondary fs-4 fw-lighter my-5">En cours de contribution..</p>
+            {% endif %}
         </div>
     </section>
 

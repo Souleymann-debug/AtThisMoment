@@ -20,10 +20,10 @@
                     <div class="carousel-inner h-100">
                         {% for article in articleALaUne|slice(0, 6) %}
                             <div class="h-100 carousel-item{% if loop.index == 1 %} active{% endif %}" data-bs-interval="10000">
-                                <img src="{{ asset('images/' ~ article.image) }}" class="d-block w-100 h-100 fit-cover">
+                                <img src="{{ asset('images/article/' ~ article.image) }}" class="d-block w-100 h-100 fit-cover">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h2 class="text-shadow-sm fs-4">
-                                        <a href="{{ path('article_detail', {'id': article.id}) }}" 
+                                        <a href="{{ path('article_detail', {'rubrique': article.rubrique.slug, 'id': article.id}) }}" 
                                            class="text-decoration-none link-light">
                                             {{ article.titre }}
                                         </a>
@@ -51,7 +51,7 @@
                         <div class="{% if not loop.last %}border-bottom border-1  pb-2{% endif %} {% if not loop.first %}pt-2{% endif %}">
                             <span class="text-secondary">{{ article.rubrique }}</span>
                             <h2 class="ff-play fs-6 fw-bold">
-                                <a href="{{ path('article_detail', {'id': article.id}) }}" 
+                                <a href="{{ path('article_detail', {'rubrique': article.rubrique.slug, 'id': article.id}) }}" 
                                    class="text-decoration-none link-dark">{{ article.titre }}</a>
                             </h2>
                         </div>
@@ -73,11 +73,11 @@
                 <div class="row">
                     {% for article in articles %}
                         <article class="d-flex flex-column col-md-3 my-3 position-relative">
-                            <img src="{{ asset('images/' ~ article.image) }}" class="card-img-top fit-cover w-100" height="200">
+                            <img src="{{ asset('images/article/' ~ article.image) }}" class="card-img-top fit-cover w-100" height="200">
                             <div class="d-flex flex-column card-body px-3 px-md-0">
                                 <span>{{ article.datePoste|date('d/m/Y') }}</span>
                                 <h2 class="ff-play fs-6 card-title">
-                                    <a href="{{ path('article_detail', {'id': article.id}) }}" 
+                                    <a href="{{ path('article_detail', {'rubrique': article.rubrique.slug, 'id': article.id}) }}" 
                                     class="stretched-link text-decoration-none link-dark">{{ article.titre }}</a>
                                 </h2>
                             </div>

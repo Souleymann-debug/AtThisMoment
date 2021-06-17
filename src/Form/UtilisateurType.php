@@ -16,8 +16,7 @@ class UtilisateurType extends AbstractType
             ->add('prenom')
             ->add('date_naiss')
             ->add('email')
-            ->add('motdepasse')
-            ->add('isadmin')
+            ->add('password')
         ;
     }
 
