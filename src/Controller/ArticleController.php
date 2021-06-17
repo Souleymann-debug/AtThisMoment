@@ -25,7 +25,7 @@ class ArticleController extends AbstractController{
      */
     public function new(Request $request,SluggerInterface $slugger): Response {
         $article  = new Article() ;
-        $article->setDatePoste(new DateTime('now'));
+        $article->setDatePost(new DateTime('now'));
 
         $form = $this->createForm(ArticleType::class, $article);
 
