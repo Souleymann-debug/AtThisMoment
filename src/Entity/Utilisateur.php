@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass=UtilisateurRepository::class)
  */
-class Utilisateur implements UserInterface , \Serializable{
+class Utilisateur implements UserInterface, \Serializable{
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -57,9 +58,14 @@ class Utilisateur implements UserInterface , \Serializable{
 
     private $passwordHacher;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Postlike::class, mappedBy="utilisateur")
+     */
+    private $likes;
+
     public function __construct(UserPasswordHasher $passHacher) {
         $this->articles = new ArrayCollection();
-
+        $this->likes = new ArrayCollection();
         $this->passwordHacher = $passHacher;
     }
 
@@ -168,5 +174,35 @@ class Utilisateur implements UserInterface , \Serializable{
             $this->motdepasse,
             $this->isadmin,
         ) = unserialize($serialized,["allowed_classes"=>false]);
+    }
+    
+    /**
+     * @return Collection|Postlike[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Postlike $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Postlike $like): self
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getUtilisateur() === $this) {
+                $like->setUtilisateur(null);
+            }
+        }
+
+        return $this;
     }
 }

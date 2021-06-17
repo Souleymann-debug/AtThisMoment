@@ -1,15 +1,32 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <div class="container">
-        {{form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-            {{form_row(form.titre)}}
-            {{form_row(form.contenu)}}
-            {{form_row(form.image)}}
-            {{form_row(form.rubrique)}}
-            {{form_row(form.valide)}}
-            {{form_row(form.datePoste)}}
-            <button type='submit' class='btn btn-primary'>Créer</button>
-        {{form_end(form)}}
-    </div>
+    {{form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{form_row(form.titre)}}
+        {{form_row(form.contenu)}}
+        {{form_row(form.image)}}
+        {{form_row(form.rubrique)}}
+        {{form_row(form.valide)}}
+        {{form_row(form.datePoste)}}
+        <button type='submit' class='btn btn-primary'>Créer</button>
+        
+        
+        <a href="#" class="btn btn-link js-like">
+            {% if app.user %}
+                {% set isLiked = false %}
+                {% for like in article.likes %}
+                    {% if like.user == app.user  %}
+                        {% set isLiked = true %}
+                    {% endif %}
+                {% endfor %}
+                {% if isLiked == true  %}
+                    <i class="fas fa-thumbs-up"></i>
+                {% else %}
+                    <i class="far fa-thumbs-up"></i>
+                {% endif %}
+            {% endif %}
+            <span class="js-likes">{{article.likes | length}}</span>
+            <span class="js-label">J'aime</span>
+        </a>
+    {{form_end(form)}}
 {% endblock %}

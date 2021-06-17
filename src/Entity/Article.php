@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Utilisateur;
 use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -161,4 +162,21 @@ class Article
         $this->rubrique = $rubrique;
         return $this;
     }
+    /**
+     * Permet de savoir si cet article est liké pas un utilisateur
+     * @param\App\Entity\Utilisateur $utilisateur
+     * @return boolean
+     */
+
+
+    //Methode dans l'article pour savoir que l'utilisateur à aimer l'article ou pas 
+
+    // public function isLikedByUser(Utilisateur $utilisateur) : bool {
+    //     // demander à mon article est ce que tt les likes que tu a un qui appartient à un utilisateur
+    //     foreach($this->likes as $like){
+    //         if ($this->getUtilisateur() == $utilisateur)
+    //         return true;
+    //     }
+    //     return false;
+    // }
 }
