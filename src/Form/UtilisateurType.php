@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Utilisateur;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,10 +15,15 @@ class UtilisateurType extends AbstractType
         $builder
             ->add('nom')
             ->add('prenom')
-            ->add('date_naiss')
+            ->add('date_naiss',DateType::class,[
+                'label'=>'Date de naissance',
+                'widget' => 'single_text',
+                'placeholder' => [
+                    'year' => 'Année', 'month' => 'Mois', 'day' => 'Jour',
+                ]
+            ])
             ->add('email')
-            ->add('motdepasse')
-            ->add('isadmin')
+            ->add('password')
         ;
     }
 

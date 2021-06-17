@@ -6,13 +6,13 @@ use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UtilisateurRepository::class)
  */
-class Utilisateur  {
+class Utilisateur implements UserInterface, \Serializable{
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -43,7 +43,7 @@ class Utilisateur  {
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $motdepasse;
+    private $password;
 
     /**
      * @ORM\Column(type="boolean")
@@ -56,91 +56,124 @@ class Utilisateur  {
      */
     private $articles ;
 
+    private $passwordHacher;
+
     /**
      * @ORM\OneToMany(targetEntity=Postlike::class, mappedBy="utilisateur")
      */
     private $likes;
 
-    public function __construct() {
+    public function __construct(UserPasswordHasher $passHacher) {
         $this->articles = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->passwordHacher = $passHacher;
     }
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int{
         return $this->id;
     }
 
-    public function getNom(): ?string
-    {
+    public function getNom(): ?string{
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
-    {
+    public function setNom(string $nom): self {
         $this->nom = $nom;
 
         return $this;
     }
 
-    public function getPrenom(): ?string
-    {
+    public function getPrenom(): ?string{
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): self
-    {
+    public function getUsername(){
+        return $this->prenom.' '.$this->nom;
+    }
+
+    public function setPrenom(string $prenom): self{
         $this->prenom = $prenom;
 
         return $this;
     }
 
-    public function getDateNaiss(): ?\DateTimeInterface
-    {
+    public function getDateNaiss(): ?\DateTimeInterface{
         return $this->date_naiss;
     }
 
-    public function setDateNaiss(\DateTimeInterface $date_naiss): self
-    {
+    public function setDateNaiss(\DateTimeInterface $date_naiss): self{
         $this->date_naiss = $date_naiss;
 
         return $this;
     }
 
-    public function getEmail(): ?string
-    {
+    public function getEmail(): ?string{
         return $this->email;
     }
 
-    public function setEmail(string $email): self
-    {
+    public function setEmail(string $email): self{
         $this->email = $email;
 
         return $this;
     }
 
-    public function getMotdepasse(): ?string
-    {
-        return $this->motdepasse;
+    public function getPassword(): ?string{
+        return $this->password;
     }
 
-    public function setMotdepasse(string $motdepasse): self
-    {
-        $this->motdepasse = $motdepasse;
+    public function setPassword(string $password): self{
+        $this->password = $this->passwordHacher->hashPassword($this,$password) ;
 
         return $this;
     }
 
-    public function getIsadmin(): ?bool
-    {
+    public function getIsadmin(): ?bool {
         return $this->isadmin;
     }
 
-    public function setIsadmin(bool $isadmin): self
-    {
+    public function setIsadmin(bool $isadmin): self{
         $this->isadmin = $isadmin;
 
         return $this;
+    }
+
+    public function getRoles(){
+        return ['ROLE_ADMIN'];
+    }
+
+    public function getSalt(){
+        return null;
+    }
+
+    public function getUserIdentifier(){
+        return $this->email;
+    }
+
+    public function eraseCredentials(){
+    }
+
+    public function serialize(){
+        return serialize([
+            $this->id,
+            $this->nom,
+            $this->prenom,
+            $this->date_naiss,
+            $this->email,
+            $this->password,
+            $this->isadmin,
+        ]);
+    }
+
+    public function unserialize($serialized){
+        list(
+            $this->id,
+            $this->nom,
+            $this->prenom,
+            $this->date_naiss,
+            $this->email,
+            $this->password,
+            $this->isadmin,
+        ) = unserialize($serialized,["allowed_classes"=>false]);
     }
 
     /**
