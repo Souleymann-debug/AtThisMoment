@@ -59,6 +59,11 @@ class Article
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Postlike::class, mappedBy="article")
+     */
+    private $likes;
+
     public function __construct() {
         $this->comments = new ArrayCollection();
     }
@@ -179,4 +184,40 @@ class Article
     //     }
     //     return false;
     // }
+
+    /**
+     * Get the value of utilisateur
+     */
+    public function getUtilisateur()
+    {
+        return $this->utilisateur;
+    }
+
+    /**
+     * Set the value of utilisateur
+     */
+    public function setUtilisateur($utilisateur): self
+    {
+        $this->utilisateur = $utilisateur;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of likes
+     */
+    public function getLikes()
+    {
+        return $this->likes;
+    }
+
+    /**
+     * Set the value of likes
+     */
+    public function setLikes($likes): self
+    {
+        $this->likes = $likes;
+
+        return $this;
+    }
 }
