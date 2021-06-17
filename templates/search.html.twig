@@ -25,7 +25,7 @@
                         <article class="py-4 position-relative border-bottom">
                             <span>{{ article.rubrique ~' | '~ article.datePoste|date('d/m/Y') }}</span>
                             <h2 class=" mt-2 ff-play fs-5">
-                                <a href="{{ path('article_detail', {'id': article.id}) }}" 
+                                <a href="{{ path('article_detail', {'rubrique': article.rubrique.slug, 'id': article.id}) }}" 
                                     class="stretched-link text-decoration-none link-dark">{{ article.titre }}</a>
                             </h2>
                         </article>

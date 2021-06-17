@@ -88,7 +88,8 @@ class BaseController extends AbstractController
             $em->persist($comment);
             $em->flush();
             return $this->redirectToRoute('article_detail',[
-                'rubrique' => $article->getRubrique()->getSlug(), 'id' => $article->getId()
+                'rubrique' => $article->getRubrique()->getSlug(), 
+                'id' => $article->getId()
             ]);
         }
 
