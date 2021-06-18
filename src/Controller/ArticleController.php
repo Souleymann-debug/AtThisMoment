@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ArticleController extends AbstractController{
     /**
-     * @Route("/article/new", name="article")
+     * @Route("/article/new", name="new_article")
      */
     public function new(Request $request,SluggerInterface $slugger): Response {
         $article  = new Article() ;
@@ -54,7 +54,7 @@ class ArticleController extends AbstractController{
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
-            return $this->redirectToRoute("article-readAll");
+            return $this->redirectToRoute("home");
         }
 
         return $this->render("article/new.html.twig",[
@@ -112,7 +112,7 @@ class ArticleController extends AbstractController{
     }
     
     /**
-     * @Route("/", name="article-readAll")
+     * @Route("/all", name="article-readAll")
      */
     public function readAll(){
         $rep = $this->getDoctrine()->getRepository(Article::class);
@@ -159,10 +159,14 @@ class ArticleController extends AbstractController{
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute("article-readAll");
+            return $this->redirectToRoute("article_detail", [
+                'rubrique' => $article->getRubrique()->getSlug(),
+                'id' => $article->getId()
+            ]);
         }
         return $this->render("article/update.html.twig",[
             "form" => $form->createView(),
+            "article" => $article
         ]);
     }
 
@@ -174,6 +178,6 @@ class ArticleController extends AbstractController{
         $em = $this->getDoctrine()->getManager();
         $em->remove($article);
         $em->flush();
-        return $this->redirectToRoute("article-readAll");
+        return $this->redirectToRoute("home");
     }
 }

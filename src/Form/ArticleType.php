@@ -3,6 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Article;
+use App\Entity\Rubrique;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -17,7 +20,7 @@ class ArticleType extends AbstractType
         $builder
             ->add('titre')
             ->add('contenu')
-            ->add('image',FileType::class,[
+            ->add('image', FileType::class,[
                 'label' => 'Image',
 
                 // unmapped means that this field is not associated to any entity property
@@ -29,36 +32,28 @@ class ArticleType extends AbstractType
 
                 // unmapped fields can't define their validation using annotations
                 // in the associated entity, so you can use the PHP constraint classes
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/jpg',
-                            'image/png',
-                        ],
-                        'mimeTypesMessage' => 'Veuillez importer un fichier JPG ou PNG',
-                    ])
-                ],
+                // 'constraints' => [
+                //     new File([
+                //         'maxSize' => '1024k',
+                //         'mimeTypes' => [
+                //             'image/jpeg',
+                //             'image/jpg',
+                //             'image/png',
+                //         ],
+                //         'mimeTypesMessage' => 'Veuillez importer un fichier JPG ou PNG',
+                //     ])
+                // ],
             ])
-            ->add('rubrique',ChoiceType::class, array(
+            ->add('rubrique', EntityType::class, array(
+                'class' => Rubrique::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('r')
+                        ->orderBy('r.nom', 'ASC');
+                },
                 'label' => 'Rubrique', 
-                'choices' => array (
-                    'World' => 'World', 
-                    'U.S' => 'U.S',
-                    'Design' => 'Design', 
-                    'Culture' => 'Culture', 
-                    'Technologie' => 'Technologie', 
-                    'Business' => 'Business', 
-                    'Politics' => 'Politics', 
-                    'Opinion' => 'Opinion', 
-                    'Science' => 'Science', 
-                    'Health' => 'Health', 
-                    'Travel' => 'Travel', 
-                    'Style' => 'Style', 
-                )
             ))
             ->add('valide')
+            ->add('a_la_une')
         ;
     }
 

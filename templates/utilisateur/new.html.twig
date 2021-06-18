@@ -1,13 +1,18 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    {{form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-        {{form_row(form.nom)}}
-        {{form_row(form.prenom)}}
-        {{form_row(form.date_naiss)}}
-        {{form_row(form.email)}}
-        {{form_row(form.password)}}
-        <button type='submit' class='btn btn-primary'>S'inscrire</button>
-       
-    {{form_end(form)}}
+    <section class="container">
+        <div class="col-md-6 mx-auto my-5">
+            <h1 class="ff-play fs-3 mb-3">Créer un compte</h1>
+            {{form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{form_row(form.nom, { 'attr': {'class': 'mb-3'} })}}
+            {{form_row(form.prenom, { 'attr': {'class': 'mb-3'} })}}
+            {{form_label(form.date_naiss)}}
+            {{form_widget(form.date_naiss, { 'attr': {'class': 'mb-3 d-flex'} })}}
+            {{form_row(form.email, { 'attr': {'class': 'mb-3'} })}}
+            {{form_row(form.password, { 'attr': {'class': 'mb-3'} })}}
+            <button type='submit' class='btn btn-warning mt-3'>S'inscrire</button>
+            {{form_end(form)}}
+        </div>
+    </section>
 {% endblock %}
