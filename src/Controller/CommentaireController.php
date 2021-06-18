@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,25 +43,23 @@ class CommentaireController extends AbstractController
           $em = $this->getDoctrine()->getManager();
           $em->remove($commentaire);
           $em->flush();
-          return $this->redirectToRoute("commentaire");
+          return $this->redirectToRoute("home");
       }
 
      //Nouvelle Controleur recuperer au format jason notre commentaires
 
      /**
-      * @Route("/commentaires", name="lire_commentaire")
+      * @Route("/commentaires/{id}", name="lire_commentaire")
       */
-      public function getAll(): Response {
-            $commentaires = $this->getDoctrine()->getRepository(Commentaire::class)->findAll();
-            
+      public function getAll(Article $article): Response {
+        $commentaires = $this->getDoctrine()->getRepository(Commentaire::class)->findBy(["article" => $article]);
 
+        $arrayOfComments = [];
 
-          $arrayOfComments = [];
-
-          foreach ($commentaires as $commentaire){  
+        foreach ($commentaires as $commentaire){  
             $arrayOfComments[] = $commentaire->toArray();
-          }
-          return $this->json($arrayOfComments);
+        }
+        return $this->json($arrayOfComments);
       }
 
       /**

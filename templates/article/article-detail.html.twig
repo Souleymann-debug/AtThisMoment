@@ -10,11 +10,13 @@
                 <li class="pe-2">
                     <a href="{{ path('home') }}" class="link-warning">Accueil</a>
                 </li> / 
-                <li class="px-2">   
-                    <a href="{{ path('rubrique', {'slug': article.rubrique.slug}) }}"
-                       class="link-warning">
-                        {{ article.rubrique.nom }}
-                    </a>
+                <li class="px-2">
+                    {% if article.rubrique %}
+                        <a href="{{ path('rubrique', {'slug': article.rubrique.slug}) }}"
+                        class="link-warning">
+                            {{ article.rubrique.nom }}
+                        </a>
+                    {% endif %}
                 </li>
             </ul>
             <h1 class="ff-play fs-2 mt-4 text-center">{{ article.titre }}</h1>
@@ -55,6 +57,21 @@
                 <p class="my-3">{{ article.contenu }}</p>
             </article>
 
+            
+         <a href=" {{ path('article_like' , {'id' : article.id}) }}" class="btn btn-link js-like">
+
+            {% if app.user and article.isLikedByUser(app.user) %}
+               
+                <i class="fas fa-thumbs-up"></i>
+            {% else %}
+                <i class="far fa-thumbs-up"></i>
+            {% endif %}
+            <span class="js-likes">{{article.likes|length}}</span>
+            <span class="js-label">J'aime</span>
+        </a>
+        
+    <br><br>
+    
             <h3 class="ff-play fs-3 my-3">Commentaires</h3>
             {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'mb-4'}})}}
                 {{ form_widget(form.contenu, { 'attr': {'class': 'mb-3'} }) }}
@@ -63,15 +80,92 @@
                 </div>
             {{ form_end(form) }}
 
-            <h4 class="ff-play fs-4">Tous les commentaires</h4>
+            <div class="container">
+                <a href="/commentaires/{{article.id}}" class="btn btn-primary js-commentaires">Afficher les commentaires</a>
+                <div class="commentaires"></div>
+            </div>
+
+            {# <h4 class="ff-play fs-4">Tous les commentaires</h4>
             {% if comments|length > 0 %}
                 {% for comment in comments %}
                     <p class="mb-0 py-4 border-bottom">{{ comment.contenu }}</p>
+                    <a href="/ajax">Test</a>
                 {% endfor %}
             {% else %}
                 <p class="mb-0 py-4 border-bottom text-secondary fst-italic">Soyez le premier à commenter</p> 
-            {% endif %}
+            {% endif %} #}
         </div>
     </section>
-
+    
+    
+    <br><br>
+    </div> 
 {% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+    window.addEventListener("load",event=>{
+        document.querySelector("a.js-commentaires").addEventListener("click",getCommentaires);
+    });
+
+    function getCommentaires(event){
+        event.preventDefault(); //pour ne pas deriger vers la page ajax
+        axios.get(this.href).then(response=>{
+        const commentaires = document.querySelector("div.commentaires");
+        if (this.classList.contains("btn-primary")){
+            response.data.forEach(commentaire =>{
+               const item = document.createElement("li"); // créer un li ds HTML
+               item.textContent = commentaire.contenu + ' - ' + moment(commentaire.dateComment.date).format('DD/MM/YYYY');
+               //item.textContent = "eee";
+               //item.date = commentaire.dateComment;
+               supprimer = document.createElement("a");
+               supprimer.textContent = "supprimer";
+                supprimer.href = "/sup_commentaire/"+commentaire.id;
+                item.appendChild(supprimer);
+               commentaires.appendChild(item);
+            });
+        } 
+        })
+    }
+
+
+    function onClickBtnLike(event){
+            event.preventDefault();
+
+            const url = this.href;
+            const spanCount = this.querySelector('span.js-likes');
+            const icone = this.querySelector('i');
+
+            axios.get(url).then(function(response){
+                console.log(response);
+                spanCount.textContent = response.data.likes;
+
+                if(icone.classList.contains('fas'))
+                 icone.classList.replace('fas', 'far');
+                else 
+                    icone.classList.replace('far', 'fas');
+            }).catch(function(error){
+                    if(error.response.status ===403){
+                        window.alert("Vous ne pouvez pas liker un article si vous n'etes pas connecté!!!!")
+                    } else {
+                        window.alert("Une erreur s'est produite, réessayez plus trad")
+                    }
+                        
+            });
+    }
+
+    document.querySelectorAll('a.js-like').forEach(function(link){
+       link.addEventListener('click', onClickBtnLike); 
+    })
+</script>
+{% endblock %}
+
+
+
+
+
+
+

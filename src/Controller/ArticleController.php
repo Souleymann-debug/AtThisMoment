@@ -71,7 +71,6 @@ class ArticleController extends AbstractController{
      * @Route("/article/{id}/like", name="article_like")
      */
     public function like(Article $article, PostlikeRepository $postlikeRepository) : Response {
-
         $manager = $this->getDoctrine()->getManager();
         $utilisateur = $this->getUser();
 
@@ -79,35 +78,38 @@ class ArticleController extends AbstractController{
             'code'=> 403,
             'message' =>"unauthorized"
         ], 403);
+
         if ($article->isLikedByUser($utilisateur)){
             $like = $postlikeRepository->findOneBy([
                 'article' => $article,
-                'utilisateur' => $utilisateur,
+                'utilisateur' => $utilisateur
             ]);
             $manager->remove($like);
             $manager->flush();
 
-             return $this->json([
+            return $this->json([
                  'code'=> 200,
                  'message'=> 'like bien supprime',
                  'likes'=> $postlikeRepository->count(['article'=> $article])
-                 ], 200);
+            ], 200);
+        }else {
+            // créer un nv like
 
-                 // créer un nv like
+            $like = new Postlike();
+            $like->setArticle($article)
+            ->setUtilisateur($utilisateur);
 
-                 $like = new Postlike();
-                 $like->setArticle($article)
-                    ->setUser($utilisateur);
+        
+            $manager->persist($like);
+            $manager->flush();
+             return $this->json([
+                'code'=> 200,
+                'message' => 'Ca marche bien',
+                'likes' => $postlikeRepository->count(['article' => $article])
+            ],200);
+        }
 
-                $manager->persist($like);
-                $manager->flush();
-
-         }
-         return $this->json([
-          'code'=> 200,
-          'message' => 'Ca marche bien',
-           'likes' => $postlikeRepository->count(['article' => $article])
-        ],200);
+        
 
     }
     
