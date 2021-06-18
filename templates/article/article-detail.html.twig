@@ -51,26 +51,21 @@
                     </div>
                 </div>
             {% endif %}
-            <article class="mb-5">
+            <article class="mb-4">
                 <img src="{{ asset('images/article/' ~ article.image) }}" class="card-img-top fit-cover w-100 mb-3" height="400">
                 <span class="">Publié le {{ article.datePoste|date('d/m/Y') }}</span>
                 <p class="my-3">{{ article.contenu }}</p>
             </article>
 
-            
-         <a href=" {{ path('article_like' , {'id' : article.id}) }}" class="btn btn-link js-like">
-
-            {% if app.user and article.isLikedByUser(app.user) %}
-               
-                <i class="fas fa-thumbs-up"></i>
-            {% else %}
-                <i class="far fa-thumbs-up"></i>
-            {% endif %}
-            <span class="js-likes">{{article.likes|length}}</span>
-            <span class="js-label">J'aime</span>
-        </a>
-        
-    <br><br>
+            <a href=" {{ path('article_like' , {'id' : article.id}) }}" class="text-decoration-none js-like">
+                {% if app.user and article.isLikedByUser(app.user) %}
+                    <i class="fas fa-thumbs-up"></i>
+                {% else %}
+                    <i class="far fa-thumbs-up"></i>
+                {% endif %}
+                <span class="js-likes">{{article.likes|length}}</span>
+                <span class="js-label">J'aime</span>
+            </a>
     
             <h3 class="ff-play fs-3 my-3">Commentaires</h3>
             {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'mb-4'}})}}
@@ -80,10 +75,8 @@
                 </div>
             {{ form_end(form) }}
 
-            <div class="container">
-                <a href="/commentaires/{{article.id}}" class="btn btn-primary js-commentaires">Afficher les commentaires</a>
-                <div class="commentaires"></div>
-            </div>
+            <a href="/commentaires/{{article.id}}" class="ff-play fs-5 link-dark js-commentaires pb-5">Afficher tous les commentaires</a>
+            <div class="commentaires"></div>
 
             {# <h4 class="ff-play fs-4">Tous les commentaires</h4>
             {% if comments|length > 0 %}
@@ -96,17 +89,12 @@
             {% endif %} #}
         </div>
     </section>
-    
-    
-    <br><br>
-    </div> 
 {% endblock %}
 
 {% block javascripts %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-
     window.addEventListener("load",event=>{
         document.querySelector("a.js-commentaires").addEventListener("click",getCommentaires);
     });
@@ -115,46 +103,44 @@
         event.preventDefault(); //pour ne pas deriger vers la page ajax
         axios.get(this.href).then(response=>{
         const commentaires = document.querySelector("div.commentaires");
-        if (this.classList.contains("btn-primary")){
-            response.data.forEach(commentaire =>{
-               const item = document.createElement("li"); // créer un li ds HTML
-               item.textContent = commentaire.contenu + ' - ' + moment(commentaire.dateComment.date).format('DD/MM/YYYY');
-               //item.textContent = "eee";
-               //item.date = commentaire.dateComment;
-               supprimer = document.createElement("a");
-               supprimer.textContent = "supprimer";
-                supprimer.href = "/sup_commentaire/"+commentaire.id;
-                item.appendChild(supprimer);
-               commentaires.appendChild(item);
-            });
-        } 
+            //if (this.classList.contains("btn-primary")){
+                response.data.forEach(commentaire =>{
+                const item = document.createElement("li"); // créer un li ds HTML
+                item.textContent = commentaire.contenu + ' - ' + moment(commentaire.dateComment.date).format('DD/MM/YYYY');
+                //item.textContent = "eee";
+                //item.date = commentaire.dateComment;
+                supprimer = document.createElement("a");
+                supprimer.textContent = "supprimer";
+                    supprimer.href = "/sup_commentaire/"+commentaire.id;
+                    item.appendChild(supprimer);
+                commentaires.appendChild(item);
+                });
+            //} 
         })
     }
 
-
     function onClickBtnLike(event){
-            event.preventDefault();
+        event.preventDefault();
 
-            const url = this.href;
-            const spanCount = this.querySelector('span.js-likes');
-            const icone = this.querySelector('i');
+        const url = this.href;
+        const spanCount = this.querySelector('span.js-likes');
+        const icone = this.querySelector('i');
 
-            axios.get(url).then(function(response){
-                console.log(response);
-                spanCount.textContent = response.data.likes;
+        axios.get(url).then(function(response){
+            console.log(response);
+            spanCount.textContent = response.data.likes;
 
-                if(icone.classList.contains('fas'))
-                 icone.classList.replace('fas', 'far');
-                else 
-                    icone.classList.replace('far', 'fas');
-            }).catch(function(error){
-                    if(error.response.status ===403){
-                        window.alert("Vous ne pouvez pas liker un article si vous n'etes pas connecté!!!!")
-                    } else {
-                        window.alert("Une erreur s'est produite, réessayez plus trad")
-                    }
-                        
-            });
+            if(icone.classList.contains('fas'))
+                icone.classList.replace('fas', 'far');
+            else 
+                icone.classList.replace('far', 'fas');
+        }).catch(function(error){
+            if(error.response.status ===403){
+                window.alert("Vous ne pouvez pas liker un article si vous n'etes pas connecté!!!!")
+            } else {
+                window.alert("Une erreur s'est produite, réessayez plus trad")
+            }  
+        });
     }
 
     document.querySelectorAll('a.js-like').forEach(function(link){
