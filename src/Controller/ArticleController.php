@@ -18,20 +18,30 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Security\Core\Security;
 
 class ArticleController extends AbstractController{
+
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     /**
      * @Route("/article/new", name="new_article")
      */
     public function new(Request $request,SluggerInterface $slugger): Response {
+        $user = $this->security->getUser();
         $article  = new Article() ;
         $article->setDatePoste(new DateTime('now'));
 
         $form = $this->createForm(ArticleType::class, $article);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $article->setUtilisateur($user);
             $file = $form->get("image")->getData();
             
             if ($file) {
