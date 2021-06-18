@@ -25,7 +25,7 @@ class ArticleController extends AbstractController{
      */
     public function new(Request $request,SluggerInterface $slugger): Response {
         $article  = new Article() ;
-        $article->setDatePost(new DateTime('now'));
+        $article->setDatePoste(new \DateTime('now'));
 
         $form = $this->createForm(ArticleType::class, $article);
 
@@ -81,7 +81,7 @@ class ArticleController extends AbstractController{
         ], 403);
         if ($article->isLikedByUser($utilisateur)){
             $like = $postlikeRepository->findOneBy([
-                'post' => $article,
+                'article' => $article,
                 'utilisateur' => $utilisateur,
             ]);
             $manager->remove($like);
@@ -91,13 +91,13 @@ class ArticleController extends AbstractController{
                  'code'=> 200,
                  'message'=> 'like bien supprime',
                  'likes'=> $postlikeRepository->count(['article'=> $article])
-                 ],200);
+                 ], 200);
 
                  // créer un nv like
 
                  $like = new Postlike();
                  $like->setArticle($article)
-                    ->setUtilisateur($utilisateur);
+                    ->setUser($utilisateur);
 
                 $manager->persist($like);
                 $manager->flush();
